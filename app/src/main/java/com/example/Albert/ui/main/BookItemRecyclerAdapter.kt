@@ -15,7 +15,7 @@ class BookItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 }
 
-class BookItemRecyclerAdapter(private val bookItemList:ArrayList<BookItem>) : RecyclerView.Adapter<BookItemViewHolder>() {
+class BookItemRecyclerAdapter(private var bookItemList:ArrayList<BookItem>) : RecyclerView.Adapter<BookItemViewHolder>() {
 
     val bookItemClicked = MutableLiveData<BookItem>()
     val OnBookItemClicked:LiveData<BookItem>
@@ -29,15 +29,21 @@ class BookItemRecyclerAdapter(private val bookItemList:ArrayList<BookItem>) : Re
             return onBottomHit
         }
 
+    var BookList:ArrayList<BookItem>
+        get() {
+            return bookItemList
+        }
+        set(value) {
+            bookItemList = value
+        }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookItemViewHolder {
         var view = LayoutInflater.from(parent.context).inflate(R.layout.list_book_item, parent, false)
         return BookItemViewHolder(view)
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getItemCount(): Int {
         return bookItemList.size
-        // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onBindViewHolder(holder: BookItemViewHolder, position: Int) {
@@ -51,7 +57,6 @@ class BookItemRecyclerAdapter(private val bookItemList:ArrayList<BookItem>) : Re
         if(position + 1 == bookItemList.size){
             onBottomHit.value = null
         }
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 

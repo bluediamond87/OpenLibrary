@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Albert.Models.BookItem
 import kotlinx.android.synthetic.main.search_fragment.*
@@ -32,18 +33,30 @@ class SearchFragment : Fragment() {
 
         // TODO: Use the ViewModel
         var bookItemList = ArrayList<BookItem>()
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
+        bookItemList.add(BookItem("", "Test Book", "INFO"))
         val adapter = BookItemRecyclerAdapter(bookItemList)
-
+        book_items_recycler.layoutManager = LinearLayoutManager(context)
         book_items_recycler.adapter = adapter
         viewModel.OnListChange.observe(this, Observer {
-            bookItemList = it
+            adapter.BookList = it
             book_items_recycler.adapter?.notifyDataSetChanged()
         })
 
         viewModel.OnAppendAdditionalItems.observe(this, Observer {
-            val refreshStart = bookItemList.size
-            bookItemList.addAll(it)
-            bookItemList.add(BookItem.BottomSignal)
+            val list = adapter.BookList
+            val refreshStart = adapter.BookList.size
+            list.addAll(it)
+            list.add(BookItem.BottomSignal)
             book_items_recycler.adapter?.notifyItemRangeChanged(refreshStart, it.size + 1)
         })
 
@@ -55,6 +68,10 @@ class SearchFragment : Fragment() {
 
         viewModel.onSearchUpdate.observe(this, Observer {
             pageCounter = 1
+        })
+
+        adapter.OnBookItemClicked.observe(this, Observer {
+
         })
 
         search_edit.addTextChangedListener( object : TextWatcher {

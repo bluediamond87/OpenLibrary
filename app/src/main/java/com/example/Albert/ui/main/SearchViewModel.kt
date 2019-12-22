@@ -33,7 +33,7 @@ class SearchViewModel : ViewModel() {
 
     var searchingFor = ""
 
-    var currentPage = 0
+    var currentPage = 1
 
     fun search(searchFor:String) {
         searchingFor = searchFor
@@ -42,7 +42,6 @@ class SearchViewModel : ViewModel() {
     }
 
     fun refreshList() {
-
     }
 
     fun shutdown() {
@@ -55,19 +54,24 @@ class SearchViewModel : ViewModel() {
     }
 
     fun doFreshSearch() {
-        val disposable = Repo.getInstance().getBookSearch(searchingFor, 1)
-            .performOnComputation()
-            .toLiveData(disposable)
+
+        val disposablea = Repo.getInstance().getBookSearch(searchingFor, 1)
+            .performOnComputation().toObservable().subscribe {
+                onListChange.value = it
+            }
 
     }
 
     fun doPageSearch() {
         if (searchingFor === "") {
             onListChange.value = ArrayList()
+            return
         }
         val disposable = Repo.getInstance()
             .getBookSearch(searchingFor, currentPage)
-            .performOnComputation().toLiveData(disposable)
+            .performOnComputation().toObservable().subscribe {
+                onAppendAdditionalItems.value = it
+            }
 
     }
 
