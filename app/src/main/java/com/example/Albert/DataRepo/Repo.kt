@@ -23,7 +23,9 @@ class Repo : IRepo {
                             var results = it.BookItems.map { bookDoc -> BookItem(
                                 bookDoc.CoverImageId.toString(),
                                 bookDoc.Title,
-                                bookDoc.Authors[0])
+                                if (bookDoc.Authors.isEmpty()) "" else bookDoc.Authors[0],
+                                ""
+                                )
                             } as ArrayList<BookItem>
                             emitter.onSuccess(results)
                         }
@@ -44,7 +46,8 @@ class Repo : IRepo {
                         var results = it.BookItems.map { bookDoc -> BookItem(
                             bookDoc.CoverImageId.toString(),
                             bookDoc.Title,
-                            if (bookDoc.Authors.isEmpty()) "" else bookDoc.Authors[0])
+                            if (bookDoc.Authors.isEmpty()) "" else bookDoc.Authors[0],
+                            "")
                         }
                         emitter.onSuccess(results as ArrayList<BookItem>)
                     }

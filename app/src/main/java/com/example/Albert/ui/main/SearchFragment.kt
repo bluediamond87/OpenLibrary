@@ -1,5 +1,6 @@
 package com.example.Albert.ui.main
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
@@ -8,13 +9,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.Albert.MessageDelivery
 import com.example.Albert.Models.BookItem
 import kotlinx.android.synthetic.main.search_fragment.*
 
 import com.example.Albert.R
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_main.*
 
 class SearchFragment : Fragment() {
 
@@ -33,17 +38,6 @@ class SearchFragment : Fragment() {
 
         // TODO: Use the ViewModel
         var bookItemList = ArrayList<BookItem>()
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
-        bookItemList.add(BookItem("", "Test Book", "INFO"))
         val adapter = BookItemRecyclerAdapter(bookItemList)
         book_items_recycler.layoutManager = LinearLayoutManager(context)
         book_items_recycler.adapter = adapter
@@ -70,8 +64,21 @@ class SearchFragment : Fragment() {
             pageCounter = 1
         })
 
-        adapter.OnBookItemClicked.observe(this, Observer {
 
+
+        adapter.OnBookItemClicked.observe(this, Observer {
+            MessageDelivery.AddToSearchStack.onNext(BookItemDetailFragment.newInstance(it))
+//            childFragmentManager.beginTransaction().replace(placeholder_root.id,
+//                BookItemDetailFragment.newInstance(it)).commitNow()
+//            val intent = Intent(context, BookDetails::class.java)
+//            startActivity(intent)
+
+//            MessageDelivery.PushOnSearchStack.value = BookItemDetailFragment.newInstance(it)
+
+//            childFragmentManager?.beginTransaction()?.replace(
+//                parentFragment?.id ?: id,
+//                newInstance()
+//                )?.commit()
         })
 
         search_edit.addTextChangedListener( object : TextWatcher {

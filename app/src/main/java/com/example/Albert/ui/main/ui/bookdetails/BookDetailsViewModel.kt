@@ -1,11 +1,11 @@
-package com.example.Albert.ui.main
+package com.example.Albert.ui.main.ui.bookdetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.Albert.Models.BookItem
 
-class BookItemDetailViewModel : ViewModel() {
+class BookDetailsViewModel : ViewModel() {
     // TODO: Implement the ViewModel
     val displayTitle = MutableLiveData<String>()
     val DisplayTitle: LiveData<String>
@@ -24,4 +24,6 @@ class BookItemDetailViewModel : ViewModel() {
         displayAuthor.value = bookItem.Author
         displayInfo.value = bookItem.Info
     }
+
+
 }
