@@ -8,5 +8,8 @@ import io.reactivex.subjects.Subject
 
 object MessageDelivery {
 
-    val AddToSearchStack = PublishSubject.create<Fragment>()
+    data class StackInfo(val fragment: Fragment, val tabIndex: Int)
+    val AddToStack = PublishSubject.create<StackInfo>()
+    val PopOffStack = PublishSubject.create<Int>()
+    val CurrentPage = PublishSubject.create<Int>()
 }

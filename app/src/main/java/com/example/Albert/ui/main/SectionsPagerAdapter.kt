@@ -4,12 +4,8 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import com.example.Albert.MessageDelivery
 import com.example.Albert.R
-import kotlinx.android.synthetic.main.*
 
 private val TAB_TITLES = arrayOf(
     R.string.search_title,
@@ -20,15 +16,13 @@ private val TAB_TITLES = arrayOf(
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-class SectionsPagerAdapter(private val context: Context, private val lifecycle: LifecycleOwner, fm: FragmentManager) :
+class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
     FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return when(position){
-            0 -> {
-                PlaceholderFragment.newInstance(SearchFragment.newInstance())
-            }
-            else -> WishListFragment.newInstance()
+            0 -> StackHolderFragment.newInstance(SearchFragment.newInstance(), 0)
+            else -> StackHolderFragment.newInstance(WishListFragment.newInstance(), 1)
         }
     }
 
@@ -39,6 +33,8 @@ class SectionsPagerAdapter(private val context: Context, private val lifecycle: 
     override fun getCount(): Int {
         return TAB_TITLES.size
     }
+
+
 
 
 }

@@ -1,6 +1,5 @@
 package com.example.Albert.ui.main
 
-import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
@@ -9,17 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.Albert.MessageDelivery
-import com.example.Albert.Models.BookItem
 import kotlinx.android.synthetic.main.search_fragment.*
 
 import com.example.Albert.R
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_main.*
 
 class SearchFragment : Fragment() {
 
@@ -37,25 +30,80 @@ class SearchFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
 
         // TODO: Use the ViewModel
-        var bookItemList = ArrayList<BookItem>()
-        val adapter = BookItemRecyclerAdapter(bookItemList)
-        book_items_recycler.layoutManager = LinearLayoutManager(context)
-        book_items_recycler.adapter = adapter
-        viewModel.OnListChange.observe(this, Observer {
-            adapter.BookList = it
-            book_items_recycler.adapter?.notifyDataSetChanged()
+
+
+
+//        var bookItemList = ArrayList<BookItem>()
+//        val adapter = BookItemRecyclerAdapter(bookItemList)
+//        book_items_recycler.layoutManager = LinearLayoutManager(context)
+//        book_items_recycler.adapter = adapter
+
+//
+//
+//
+//        val listViewModel = (book_listing as TypicalBookItemListFragment).ViewModel
+//
+//        viewModel.OnAppendAdditionalItems.observe(this, Observer {
+//            listViewModel.OnAppendAdditionalItems.value = it
+////            val list = adapter.BookList
+////            val refreshStart = adapter.BookList.size
+////            list.addAll(it)
+////            list.add(BookItem.BottomSignal)
+////            book_items_recycler.adapter?.notifyItemRangeChanged(refreshStart, it.size + 1)
+//        })
+//
+//        viewModel.OnListChange.observe(this, Observer {
+//            listViewModel.OnListChange.value = it
+//        })
+//
+//        var pageCounter = 1
+//        listViewModel.OnBottomOfList.observe(this, Observer {
+//            ++pageCounter
+//            viewModel.fetchNextPage(pageCounter)
+//        })
+//
+//        viewModel.onSearchUpdate.observe(this, Observer {
+//            pageCounter = 1
+//        })
+//
+//        listViewModel.OnBookItemSelected.observe(this, Observer {
+//            MessageDelivery.AddToStack.onNext(
+//                MessageDelivery.StackInfo(BookItemDetailFragment.newInstance(it),
+//                    0))
+//        })
+//
+//        search_edit.addTextChangedListener( object : TextWatcher {
+//            override fun afterTextChanged(s: Editable?) {}
+//
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                viewModel.search(s.toString())
+//            }
+//        })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        val findFragmentById = childFragmentManager.findFragmentById(R.id.book_listing)
+        val listViewModel:TypicalBookItemListViewModel = (findFragmentById as TypicalBookItemListFragment).ViewModel
+
+        viewModel.onAppendAdditionalItems.observe(this, Observer {
+            listViewModel.OnAppendAdditionalItems.value = it
         })
 
-        viewModel.OnAppendAdditionalItems.observe(this, Observer {
-            val list = adapter.BookList
-            val refreshStart = adapter.BookList.size
-            list.addAll(it)
-            list.add(BookItem.BottomSignal)
-            book_items_recycler.adapter?.notifyItemRangeChanged(refreshStart, it.size + 1)
+        viewModel.onListChange.observe(this, Observer {
+            listViewModel.OnListChange.value = it
         })
 
         var pageCounter = 1
-        adapter.OnBottomHit.observe(this, Observer {
+        listViewModel.OnBottomOfList.observe(this, Observer {
             ++pageCounter
             viewModel.fetchNextPage(pageCounter)
         })
@@ -64,21 +112,14 @@ class SearchFragment : Fragment() {
             pageCounter = 1
         })
 
+        listViewModel.OnBookItemSelected.observe(this, Observer {
+            MessageDelivery.AddToStack.onNext(
+                MessageDelivery.StackInfo(BookItemDetailFragment.newInstance(it.bookItem),
+                    0))
+        })
 
-
-        adapter.OnBookItemClicked.observe(this, Observer {
-            MessageDelivery.AddToSearchStack.onNext(BookItemDetailFragment.newInstance(it))
-//            childFragmentManager.beginTransaction().replace(placeholder_root.id,
-//                BookItemDetailFragment.newInstance(it)).commitNow()
-//            val intent = Intent(context, BookDetails::class.java)
-//            startActivity(intent)
-
-//            MessageDelivery.PushOnSearchStack.value = BookItemDetailFragment.newInstance(it)
-
-//            childFragmentManager?.beginTransaction()?.replace(
-//                parentFragment?.id ?: id,
-//                newInstance()
-//                )?.commit()
+        listViewModel.OnBookItemWishListButton.observe( this, Observer {
+            viewModel.addToList(it.bookItem)
         })
 
         search_edit.addTextChangedListener( object : TextWatcher {
@@ -92,10 +133,6 @@ class SearchFragment : Fragment() {
         })
     }
 
-    override fun onStart() {
-        super.onStart()
-
-    }
 
 
     companion object {
