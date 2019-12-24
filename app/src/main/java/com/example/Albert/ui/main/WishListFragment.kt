@@ -52,11 +52,6 @@ class WishListFragment : Fragment() {
             listViewModel.OnAppendAdditionalItems.value = it
         })
 
-//        viewModel.onWishListBooksRemoved(this, Observer {
-//
-//        })
-
-
         listViewModel.OnBookItemSelected.observe(this, Observer {
             MessageDelivery.AddToStack.onNext(
                 MessageDelivery.StackInfo(BookItemDetailFragment.newInstance(it.bookItem)
