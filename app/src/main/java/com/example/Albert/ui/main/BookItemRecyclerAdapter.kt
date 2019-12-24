@@ -65,7 +65,7 @@ class BookItemRecyclerAdapter
         }
 
         holder.itemView.book_item_title.text = bookItem.Title
-        holder.itemView.book_item_info.text = bookItem.Info
+        holder.itemView.book_item_info.text = bookItem.Author
 
         if(position + 1 == bookItemList.size){
             impOnBottomHit.value = null

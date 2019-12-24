@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import com.example.Albert.MessageDelivery
 
 import com.example.Albert.R
+import com.example.Albert.ui.main.BookItemListFragments.WishListBookItemFragment
 
 class WishListFragment : Fragment() {
 
@@ -40,7 +41,7 @@ class WishListFragment : Fragment() {
         super.onStart()
 
         val bookListFragment =
-            childFragmentManager.findFragmentById(R.id.book_listing) as TypicalBookItemListFragment
+            childFragmentManager.findFragmentById(R.id.book_listing) as WishListBookItemFragment
 
         val listViewModel = bookListFragment.ViewModel
 
